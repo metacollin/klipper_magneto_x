@@ -5,6 +5,7 @@
 # This file may be distributed under the terms of the GNU GPLv3 license.
 import logging
 import pins
+import time
 from . import manual_probe
 
 HINT_TIMEOUT = """
@@ -333,6 +334,7 @@ class ProbeSessionHelper:
             self._probe_state_error()
         params = self.get_probe_params(gcmd)
         toolhead = self.printer.lookup_object('toolhead')
+        load_cell = self.printer.lookup_object('magneto_load_cell')
         probexy = toolhead.get_position()[:2]
         retries = 0
         positions = []
@@ -435,6 +437,7 @@ class ProbePointsHelper:
         # Lookup objects
         probe = self.printer.lookup_object('probe', None)
         method = gcmd.get('METHOD', 'automatic').lower()
+        toolhead = self.printer.lookup_object('toolhead')
         def_move_z = self.default_horizontal_move_z
         self.horizontal_move_z = gcmd.get_float('HORIZONTAL_MOVE_Z',
                                                 def_move_z)
